@@ -27,5 +27,5 @@ gcc ./src/dtan.c -o dtan.exe -lgdi32 -Wl,-subsystem,windows
 ### CMake (Ninja)
 
 ```bash
-mkdir -p build && cmake -GNinja .. && ninja
+mkdir -p build && cd build && cmake -GNinja .. && ninja
 ```
