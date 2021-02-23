@@ -137,7 +137,7 @@ static LRESULT CALLBACK window_procedure(
 
         TextOut(hdc, GetSystemMetrics(SM_CXSCREEN)/2, 0, (LPCTSTR)display_string, (int)strlen(display_string));
 
-        if (dtan_object->charset == DtanUTF8 || dtan_object->charset == DtanUTF8) {
+        if (dtan_object->charset == DtanUTF8 || dtan_object->charset == DtanSJIS) {
             free(display_string);
         }
 
