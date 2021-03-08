@@ -1,0 +1,48 @@
+name: Build
+on: push
+
+jobs:
+  macos_build:
+    runs-on: macos-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build with Clang (check)
+      run: clang ./src/main.c ./src/dtan.c ./src/dtan_macos.m -o dtan -fobjc-arc -x objective-c -Wl,-framework,Cocoa
+
+    - name: Build with CMake
+      run: mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
+
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v2
+      with:
+        name: macos_bin
+        path: ./build/bin/dtan
+
+  windows_build:
+    runs-on: windows-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build with CL (check)
+      run: |
+        ${VS_INST_PATH} = vswhere.exe -latest -property installationPath
+        Import-Module ${VS_INST_PATH}/Common7/Tools/Microsoft.VisualStudio.DevShell.dll
+        Enter-VsDevShell -VsInstallPath ${VS_INST_PATH} -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -no_logo'
+        CL .\src\main.c .\src\dtan.c .\src\dtan_windows.c gdi32.lib /link /OUT:dtan.exe /SUBSYSTEM:WINDOWS /entry:mainCRTStartup
+
+    - name: Build with GCC (check)
+      run: gcc ./src/main.c ./src/dtan.c ./src/dtan_windows.c -o dtan.exe -lgdi32 -Wl,-subsystem,windows
+
+    - name: Build with CMake
+      run: mkdir -p build && cd build && cmake .. && cmake --build . --config Release
+
+    - name: Archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: windows_bin
+        path: ./build/bin/Release/dtan.exe
