@@ -2,6 +2,8 @@
 
 #include "dtan.h"
 
+#pragma comment(lib,"user32.lib")
+
 #define APP_NAME "dtan"
 #define APP_HIGHT 72
 
