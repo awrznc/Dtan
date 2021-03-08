@@ -1,8 +1,15 @@
 #include "dtan.h"
 
-int main( int argc, char *argv[] ) {
-    if(argc < 2) return 0;
-    DtanObject dtan = DtanNew(argv[1], DtanSJIS);
-    DtanRun(&dtan);
-    return 0;
+DtanObject DtanNew(const char* displayString, DtanCharset charset) {
+    DtanObject dtan_object = {
+        displayString,
+        charset,
+        {
+            { 30, DtanIn },
+            { 50, DtanNone },
+            { 30, DtanOut }
+        },
+        { ALPHA_MIN_SIZE, 0, 0 }
+    };
+    return dtan_object;
 }
