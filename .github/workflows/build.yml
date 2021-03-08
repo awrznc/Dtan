@@ -36,7 +36,7 @@ jobs:
         CL .\src\main.c .\src\dtan.c .\src\dtan_windows.c gdi32.lib /link /OUT:dtan.exe /SUBSYSTEM:WINDOWS /entry:mainCRTStartup
 
     - name: Build with GCC (check)
-      run: gcc ./src/main.c ./src/dtan.c ./src/dtan_windows.c -o dtan.exe -lgdi32 -Wl,-subsystem,windows
+      run: gcc ./src/main.c ./src/dtan.c ./src/dtan_windows.c -o dtan.exe -lgdi32 "-Wl,-subsystem,windows"
 
     - name: Build with CMake
       run: mkdir -p build && cd build && cmake .. && cmake --build . --config Release

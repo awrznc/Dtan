@@ -26,8 +26,8 @@ CL .\src\main.c .\src\dtan.c .\src\dtan_windows.c gdi32.lib /link /OUT:dtan.exe 
 
 #### GCC (or Clang)
 
-```bash
-gcc ./src/main.c ./src/dtan.c ./src/dtan_windows.c -o dtan.exe -lgdi32 -Wl,-subsystem,windows
+```powershell
+gcc ./src/main.c ./src/dtan.c ./src/dtan_windows.c -o dtan.exe -lgdi32 "-Wl,-subsystem,windows"
 ```
 
 #### CMake (with Ninja)
