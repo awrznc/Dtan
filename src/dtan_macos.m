@@ -4,15 +4,88 @@
 
 #define FONT_TYPE @"YuMin-Demibold"
 
+@interface DtanApplication : NSApplication
+
+{
+    bool shouldKeepRunning;
+    int count;
+    int endcount;
+    DtanObject* dtanObject;
+}
+
+- (void)update;
+- (void)run;
+- (void)terminate:(id)sender;
+
+@end
+
+
+@implementation DtanApplication
+
+- (void)setDtanObject:(DtanObject*)originalDtanObject {
+    dtanObject = originalDtanObject;
+}
+
+- (void)update {
+    if( !DtanUpdateStatus(dtanObject) ) shouldKeepRunning = NO;
+    for(NSWindow *window in [self windows]){
+        for (NSView *view in window.contentView.subviews) {
+            NSMutableAttributedString *neo_attributed_string = [
+                [(NSTextField*)view attributedStringValue]
+                mutableCopy
+            ];
+            [
+                neo_attributed_string
+                addAttribute:NSForegroundColorAttributeName
+                value:[NSColor colorWithDeviceRed:0xff green:0xff blue:0xff alpha:((double)dtanObject->status.alpha)/100]
+                range:NSMakeRange(0, neo_attributed_string.length)
+            ];
+
+            // Update text color
+            [(NSTextField*)view setAttributedStringValue:neo_attributed_string];
+            [window.contentView addSubview:(NSTextField*)view];
+        }
+    }
+}
+
+- (void)run {
+
+    shouldKeepRunning = YES;
+
+    while (shouldKeepRunning) {
+
+        [self update];
+
+        NSEvent *event = [
+            self
+            nextEventMatchingMask:NSEventMaskAny
+            untilDate:[NSDate dateWithTimeIntervalSinceNow:(UPDATE_PERIOD/1000.0)]
+            inMode:NSDefaultRunLoopMode
+            dequeue:YES
+        ];
+
+        [self sendEvent:event];
+        [self updateWindows];
+    }
+}
+
+- (void)terminate:(id)sender {
+    shouldKeepRunning = NO;
+}
+
+@end
+
+
 int DtanRun (DtanObject* dtanObject) {
     @autoreleasepool {
         // Application
-        [NSApplication sharedApplication];
-        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+        DtanApplication *application = [DtanApplication sharedApplication];
+        [application setDtanObject:dtanObject];
+        [application setActivationPolicy:NSApplicationActivationPolicyRegular];
 
         // Window
         NSRect screen = [[NSScreen deepestScreen] frame];
-        id window = [
+        NSWindow* window = [
             [NSWindow alloc]
             initWithContentRect:NSMakeRect(0, 0, screen.size.width, screen.size.height)
             styleMask:NSWindowStyleMaskBorderless
@@ -54,7 +127,7 @@ int DtanRun (DtanObject* dtanObject) {
             [text_field setEditable:NO];
             [text_field setSelectable:NO];
             [text_field setDrawsBackground:NO];
-            [text_field setTextColor:[NSColor whiteColor]];
+            // [text_field setTextColor:[NSColor colorWithDeviceRed:0xff green:0xff blue:0xff alpha:1.0]];
             [text_field setStringValue:display_string];
             [text_field setAlignment:NSTextAlignmentCenter];
 
@@ -63,13 +136,21 @@ int DtanRun (DtanObject* dtanObject) {
                 mutableCopy
             ];
             [
-                attributed_string addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle]
+                attributed_string
+                addAttribute:NSUnderlineStyleAttributeName
+                value:[NSNumber numberWithInt:NSUnderlineStyleSingle]
+                range:NSMakeRange(0, attributed_string.length)
+            ];
+            [
+                attributed_string
+                addAttribute:NSForegroundColorAttributeName
+                value:[NSColor colorWithDeviceRed:0xff green:0xff blue:0xff alpha:((double)dtanObject->status.alpha)/100]
                 range:NSMakeRange(0, attributed_string.length)
             ];
             [text_field setAttributedStringValue:attributed_string];
 
             // Set Text Object
-            id superview = [window contentView];
+            NSView* superview = [window contentView];
             [superview addSubview:text_field];
 
             id layout_x = [
@@ -99,11 +180,11 @@ int DtanRun (DtanObject* dtanObject) {
         }
 
         // Draw
-        [NSApp activateIgnoringOtherApps:YES];
-        [NSApp run];
+        [application activateIgnoringOtherApps:YES];
+        [application run];
 
         // Exit
-        [NSApp terminate:nil];
+        [application terminate:nil];
     }
 
     return 0;
