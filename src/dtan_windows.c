@@ -98,29 +98,7 @@ static LRESULT CALLBACK window_procedure(
         return 0;
 
     } else if(uMsg == WM_TIMER) {
-
-        const DtanPair* current_pair = &(dtan_object->interval[dtan_object->status.current_index]);
-        double increment_alpha_size = (double)ALPHA_MAX_SIZE / (double)current_pair->time;
-
-        DtanFade fade = current_pair->fade;
-        if( fade != DtanNone) {
-            int temporary_alpha = round(dtan_object->status.alpha + (increment_alpha_size * (char)fade));
-            if(fade == DtanIn) {
-                dtan_object->status.alpha = ALPHA_MAX_SIZE < temporary_alpha ? ALPHA_MAX_SIZE : temporary_alpha;
-            } else if(fade == DtanOut) {
-                dtan_object->status.alpha = ALPHA_MIN_SIZE > temporary_alpha ? ALPHA_MIN_SIZE : temporary_alpha;
-            }
-        }
-
-        unsigned int length = sizeof(dtan_object->interval) / sizeof(dtan_object->interval[0]);
-        unsigned int max_time = current_pair->time;
-        if (dtan_object->status.current_time >= max_time) {
-            dtan_object->status.current_index++;
-            dtan_object->status.current_time = 0;
-            if( !(dtan_object->status.current_index < length) ) SendMessage( hwnd, WM_CLOSE, 0, 0 );
-        }
-        dtan_object->status.current_time++;
-
+        if( !DtanUpdateStatus(dtan_object) ) SendMessage( hwnd, WM_CLOSE, 0, 0 );
         SetLayeredWindowAttributes(hwnd, RGB(0xFE, 0xFE, 0xFE), (BYTE)dtan_object->status.alpha, LWA_COLORKEY | LWA_ALPHA);
         return 0;
 

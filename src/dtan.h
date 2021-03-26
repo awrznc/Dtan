@@ -43,4 +43,6 @@ DtanObject DtanNew(const char* displayString, DtanCharset charset);
 
 int DtanRun(DtanObject* dtanObject);
 
+int DtanUpdateStatus(DtanObject* dtanObject);
+
 #endif
