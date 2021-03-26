@@ -81,7 +81,7 @@ int DtanRun (DtanObject* dtanObject) {
         // Application
         DtanApplication *application = [DtanApplication sharedApplication];
         [application setDtanObject:dtanObject];
-        [application setActivationPolicy:NSApplicationActivationPolicyRegular];
+        [application setActivationPolicy:NSApplicationActivationPolicyAccessory];
 
         // Window
         NSRect screen = [[NSScreen deepestScreen] frame];
