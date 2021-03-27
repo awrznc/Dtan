@@ -16,8 +16,6 @@ DtanObject DtanNew(const char* displayString, DtanCharset charset) {
     return dtan_object;
 }
 
-#include<stdio.h>
-
 int DtanUpdateStatus(DtanObject* dtanObject) {
     const DtanPair* current_pair = &(dtanObject->interval[dtanObject->status.current_index]);
     double increment_alpha_size = (double)ALPHA_MAX_SIZE / (double)current_pair->time;
