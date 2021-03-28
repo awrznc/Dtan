@@ -30,11 +30,11 @@ int DtanUpdateStatus(DtanObject* dtanObject) {
         }
     }
 
-    unsigned int length = sizeof(dtanObject->interval) / sizeof(dtanObject->interval[0]);
     unsigned int max_time = current_pair->time;
     if (dtanObject->status.current_time >= max_time) {
         dtanObject->status.current_index++;
         dtanObject->status.current_time = 0;
+        unsigned int length = sizeof(dtanObject->interval) / sizeof(dtanObject->interval[0]);
         if( !(dtanObject->status.current_index < length) ) return 0;
     }
     dtanObject->status.current_time++;
