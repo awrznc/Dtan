@@ -24,7 +24,7 @@ struct dtan_pair {
     DtanFade fade;
 } typedef DtanPair;
 
-typedef const DtanPair DtanInterval[3];
+typedef DtanPair DtanInterval[3];
 
 struct dtan_status {
     unsigned char alpha;
