@@ -26,4 +26,6 @@ elseif(APPLE)
   SET_TARGET_PROPERTIES(dtan_library PROPERTIES OUTPUT_NAME dtan)
   target_link_libraries(dtan_application PRIVATE dtan_library "-framework Cocoa")
 
+  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/example/dtpn)
+
 endif()

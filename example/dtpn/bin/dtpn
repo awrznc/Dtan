@@ -1,0 +1,12 @@
+#!/bin/bash
+
+function dtpn() {
+  dtan_path=$(dtansp ${DTPN_SYMBOL})
+  dtan_status=$?
+  if [ "${dtan_status}" = "0" ] && [ "${dtan_path}" != "${DTPN_SYMBOL}" ]; then
+    (dtan "      $(echo ${dtan_path} | sed -E "s/^(.*)(\/)(.*)$/\3/")      " &)
+    export DTPN_SYMBOL=${dtan_path}
+  fi
+}
+
+dtpn
