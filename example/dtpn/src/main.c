@@ -16,13 +16,13 @@
 #endif
 
 unsigned int get_charactor_count(
-    char* directoryPath,
+    char* string,
     unsigned int length,
     char searchCharactor
 ) {
     unsigned int count = 0;
     for(int index = 0; index < length; index++) {
-        if(directoryPath[index] == searchCharactor) count++;
+        if(string[index] == searchCharactor) count++;
     }
     return count;
 }
