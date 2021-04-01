@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <dirent.h>
 #include <limits.h>
 
@@ -8,12 +7,32 @@
 #define GIT_REPOSITORY_SYMBOL ".git"
 
 #ifdef _WIN32
+#include <direct.h>
 #define SLASH_CHARACTOR '\\'
 #define FULLPATH_SIZE MAX_PATH
 #elif __APPLE__
+#include <unistd.h>
 #define SLASH_CHARACTOR '/'
 #define FULLPATH_SIZE PATH_MAX
 #endif
+
+char get_working_directory(char* path, int path_size) {
+#ifdef _WIN32
+    _getcwd(path, path_size);
+#elif __APPLE__
+    getcwd(path, path_size);
+#endif
+    return 1;
+}
+
+char get_fullpath(const char* relative_path, char* absolute_path) {
+#ifdef _WIN32
+    _fullpath(absolute_path, relative_path, FULLPATH_SIZE);
+#elif __APPLE__
+    realpath(relative_path, absolute_path);
+#endif
+    return 1;
+}
 
 unsigned int get_charactor_count(
     char* string,
@@ -35,15 +54,6 @@ char equal_string(char* a, char* b) {
     return 1;
 }
 
-char get_fullpath(const char* relative_path, char* absolute_path) {
-#ifdef _WIN32
-    _fullpath(absolute_path, relative_path, FULLPATH_SIZE);
-#elif __APPLE__
-    realpath(relative_path, absolute_path);
-#endif
-    return 1;
-}
-
 #define SUCCESS_FOUND_PROJECT   0
 #define ERR_CANT_FIND_DIR       1
 #define ERR_NO_STDOUT           2
@@ -59,7 +69,7 @@ char get_fullpath(const char* relative_path, char* absolute_path) {
   */
 int main( int argc, char *argv[] ) {
     char current_path[FULLPATH_SIZE] = { 0 };
-    getcwd(current_path, FULLPATH_SIZE);
+    get_working_directory(current_path, FULLPATH_SIZE);
     unsigned int count = get_charactor_count(current_path, FULLPATH_SIZE, SLASH_CHARACTOR);
 
     char relative_path[FULLPATH_SIZE] = DOT_SYMBOL;
