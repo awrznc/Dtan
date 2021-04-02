@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <dirent.h>
 #include <limits.h>
 
 #define DOT_SYMBOL "."
@@ -8,10 +7,12 @@
 
 #ifdef _WIN32
 #include <direct.h>
+#include <windows.h>
 #define SLASH_CHARACTOR '\\'
 #define FULLPATH_SIZE MAX_PATH
 #elif __APPLE__
 #include <unistd.h>
+#include <dirent.h>
 #define SLASH_CHARACTOR '/'
 #define FULLPATH_SIZE PATH_MAX
 #endif
@@ -75,6 +76,35 @@ int main( int argc, char *argv[] ) {
     char relative_path[FULLPATH_SIZE] = DOT_SYMBOL;
     sprintf(relative_path, "%s%c", relative_path, SLASH_CHARACTOR);
     for (int index = 0; count > index; index++) {
+
+#ifdef _WIN32
+        char relative_path_tmp[FULLPATH_SIZE] = "";
+        sprintf(relative_path_tmp, "%s%s", relative_path, "*.*");
+        WIN32_FIND_DATA find_data;
+        HANDLE hFind = FindFirstFile(relative_path_tmp, &find_data);
+
+        if(hFind == INVALID_HANDLE_VALUE) return ERR_READ_DIR;
+
+        do {
+            // Check the existence of the directory.
+            if (!equal_string(find_data.cFileName, GIT_REPOSITORY_SYMBOL)) continue;
+            FindClose(hFind);
+
+            // Check the exclude path.
+            char absolute_path[FULLPATH_SIZE+1];
+            get_fullpath(relative_path, absolute_path);
+            if (argc == 2 && equal_string(argv[1], absolute_path)) return ERR_NO_STDOUT;
+
+            // Stdout absolute path.
+            printf("%s\n", absolute_path);
+
+            return SUCCESS_FOUND_PROJECT;
+
+        } while(FindNextFile(hFind, &find_data));
+        FindClose(hFind);
+
+
+#elif __APPLE__
         DIR *dir = opendir(relative_path);
         if (dir == NULL) return ERR_READ_DIR;
 
@@ -98,6 +128,7 @@ int main( int argc, char *argv[] ) {
             return SUCCESS_FOUND_PROJECT;
         }
         if (dir != NULL) closedir(dir);
+#endif
 
         // Update path string.
         sprintf(relative_path, "%s%s%s%c", relative_path, DOT_SYMBOL, DOT_SYMBOL, SLASH_CHARACTOR);
