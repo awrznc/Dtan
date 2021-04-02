@@ -13,7 +13,7 @@ cd .\..\.. && mkdir build && cd build && cmake .. && cmake --build .
 
 @REM Setting
 @REM Add the following to AutoRun file:
-set PATH=%cd%\bin;%PATH%
+set PATH=%cd%\bin;%cd%\bin\Release;%PATH%
 doskey cd=dtpn.bat $*
 
 @REM If you have not created a file for AutoRun file, create a AutoRun file that contains the above command and set it to registry key.
