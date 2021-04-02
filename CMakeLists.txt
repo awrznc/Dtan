@@ -27,3 +27,5 @@ elseif(APPLE)
   target_link_libraries(dtan_application PRIVATE dtan_library "-framework Cocoa")
 
 endif()
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/example/dtpn)
