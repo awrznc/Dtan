@@ -9,7 +9,7 @@ Display the project name.
 
 ```bat
 @REM Build
-cd .\..\.. && mkdir build && cd build && cmake .. && cmake --build .
+cd .\..\.. && mkdir build && cd build && cmake .. && cmake --build . --config Release
 
 @REM Setting
 @REM Add the following to AutoRun file:
@@ -25,7 +25,7 @@ doskey cd=dtpn.bat $*
 
 ```bash
 # Build
-cd ./../.. && mkdir build && cd build && cmake .. && cmake --build .
+cd ./../.. && mkdir build && cd build && cmake .. && cmake --build . --config Release
 
 # Setting
 # Add the following settings to ~/.bashrc (or ~/.zshrc):
