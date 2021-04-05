@@ -15,11 +15,16 @@ jobs:
     - name: Build with CMake
       run: mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
 
+    - name: Test
+      run: |
+        ./build/bin/dtan " test "
+        ./build/bin/dtansp "/sample/path"
+
     - name: Archive code coverage results
       uses: actions/upload-artifact@v2
       with:
         name: macos_bin
-        path: ./build/bin/dtan
+        path: ./build/bin/
 
   windows_build:
     runs-on: windows-latest
@@ -41,8 +46,13 @@ jobs:
     - name: Build with CMake
       run: mkdir -p build && cd build && cmake .. && cmake --build . --config Release
 
+    - name: Test
+      run: |
+        .\build\bin\Release\dtan.exe " test "
+        .\build\bin\Release\dtansp.exe "/sample/path"
+
     - name: Archive
       uses: actions/upload-artifact@v2
       with:
         name: windows_bin
-        path: ./build/bin/Release/dtan.exe
+        path: ./build/bin/
