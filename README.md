@@ -1,6 +1,9 @@
-Dtan
-===
-Display the area name.
+<div align="center">
+  <h1>Dtan</h1>
+  <p>Display the area name.</p>
+  <a href="https://github.com/awrznc/Dtan/actions/workflows/build.yml"><img src=https://github.com/awrznc/Dtan/actions/workflows/build.yml/badge.svg></img></a>
+</div>
+
 
 ## Run
 
