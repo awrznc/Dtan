@@ -111,13 +111,13 @@ int DtanRun (DtanObject* dtanObject) {
 
         // Text
         {
-            // Font
+            // String
             NSString* display_string = [
                 [NSString stringWithCString: dtanObject->display_string encoding:NSUTF8StringEncoding]
                 stringByReplacingOccurrencesOfString:@" " withString:@"\u00a0"
             ];
 
-            // String
+            // Font
             NSTextField* text_field = [
                 [NSTextField alloc]
                 initWithFrame:NSMakeRect(0, screen.size.height/2-(FONT_SIZE/2), screen.size.width, FONT_SIZE*2)
