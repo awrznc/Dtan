@@ -39,10 +39,19 @@ struct dtan_object {
     DtanStatus status;
 } typedef DtanObject;
 
+/**
+  * Initialize Dtan Object.
+  */
 DtanObject DtanNew(const char* displayString, DtanCharset charset);
 
+/**
+  * Run Dtan application.
+  */
 int DtanRun(DtanObject* dtanObject);
 
+/**
+  * Update Dtan application.
+  */
 int DtanUpdateStatus(DtanObject* dtanObject);
 
 #endif
