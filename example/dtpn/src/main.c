@@ -10,7 +10,7 @@
 #include <windows.h>
 #define SLASH_CHARACTOR '\\'
 #define FULLPATH_SIZE MAX_PATH
-#elif __APPLE__
+#elif __linux__ || __APPLE__
 #include <unistd.h>
 #include <dirent.h>
 #define SLASH_CHARACTOR '/'
@@ -20,7 +20,7 @@
 char get_working_directory(char* path, int path_size) {
 #ifdef _WIN32
     _getcwd(path, path_size);
-#elif __APPLE__
+#elif __linux__ || __APPLE__
     getcwd(path, path_size);
 #endif
     return 1;
@@ -29,7 +29,7 @@ char get_working_directory(char* path, int path_size) {
 char get_fullpath(const char* relative_path, char* absolute_path) {
 #ifdef _WIN32
     _fullpath(absolute_path, relative_path, FULLPATH_SIZE);
-#elif __APPLE__
+#elif __linux__ || __APPLE__
     realpath(relative_path, absolute_path);
 #endif
     return 1;
@@ -104,7 +104,7 @@ int main( int argc, char *argv[] ) {
         FindClose(hFind);
 
 
-#elif __APPLE__
+#elif __linux__ || __APPLE__
         DIR *dir = opendir(relative_path);
         if (dir == NULL) return ERR_READ_DIR;
 

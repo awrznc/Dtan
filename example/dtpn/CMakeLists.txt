@@ -11,6 +11,11 @@ if(WIN32)
     TARGET dtansp POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bin/dtpn.bat ${CMAKE_BINARY_DIR}/bin/dtpn.bat
   )
+elseif(UNIX)
+  add_custom_command(
+    TARGET dtansp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bin/dtpn ${CMAKE_BINARY_DIR}/bin/dtpn
+  )
 elseif(APPLE)
   add_custom_command(
     TARGET dtansp POST_BUILD
