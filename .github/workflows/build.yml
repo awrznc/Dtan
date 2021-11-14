@@ -2,6 +2,35 @@ name: Build
 on: push
 
 jobs:
+  linux_build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install
+      run: |
+        apt-get update -y
+        apt-get install -y libx11-dev libxrender-dev libfreetype6-dev libxft-dev
+
+    - name: Build with GCC (check)
+      run: gcc ./src/main.c ./src/dtan.c ./src/dtan_linux.c -o dtan -lX11 -lXrender -lXft -lm
+
+    - name: Build with CMake
+      run: mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
+
+    - name: Archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux_bin
+        path: ./build/bin/
+
+    - name: Test
+      run: |
+        ./build/bin/dtan " test "
+        ./build/bin/dtansp "/sample/path"
+
   macos_build:
     runs-on: macos-latest
     steps:
