@@ -27,7 +27,7 @@ dtan "        sample text        "
 CL .\src\main.c .\src\dtan.c .\src\dtan_windows.c gdi32.lib /link /OUT:dtan.exe /SUBSYSTEM:WINDOWS /entry:mainCRTStartup
 ```
 
-#### GCC (or Clang)
+#### GCC
 
 ```powershell
 gcc ./src/main.c ./src/dtan.c ./src/dtan_windows.c -o dtan.exe -lgdi32 "-Wl,-subsystem,windows"
@@ -41,7 +41,7 @@ mkdir -p build && cd build && cmake -GNinja .. && ninja
 
 ### macOS
 
-#### Clang (or GCC)
+#### Clang
 
 ```zsh
 clang ./src/main.c ./src/dtan.c ./src/dtan_macos.m -o dtan -fobjc-arc -x objective-c -Wl,-framework,Cocoa

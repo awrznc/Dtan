@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.10)
 project(dtan_search_project C)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -10,6 +10,11 @@ if(WIN32)
   add_custom_command(
     TARGET dtansp POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bin/dtpn.bat ${CMAKE_BINARY_DIR}/bin/dtpn.bat
+  )
+elseif(UNIX AND NOT APPLE)
+  add_custom_command(
+    TARGET dtansp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bin/dtpn ${CMAKE_BINARY_DIR}/bin/dtpn
   )
 elseif(APPLE)
   add_custom_command(
