@@ -22,7 +22,8 @@ elseif(UNIX)
   find_package(X11 REQUIRED)
   add_library(dtan_library STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/dtan_linux.c ${CMAKE_CURRENT_SOURCE_DIR}/src/dtan.c)
   SET_TARGET_PROPERTIES(dtan_library PROPERTIES OUTPUT_NAME dtan)
-  target_link_libraries(dtan_application PRIVATE dtan_library X11 m)
+  target_include_directories(dtan_library PRIVATE "/usr/include/freetype2")
+  target_link_libraries(dtan_application PRIVATE X11 Xrender Xft m dtan_library)
 
 elseif(APPLE)
   target_compile_options(dtan_application PUBLIC
