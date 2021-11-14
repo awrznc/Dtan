@@ -18,7 +18,7 @@ if(WIN32)
   SET_TARGET_PROPERTIES(dtan_library PROPERTIES OUTPUT_NAME dtan)
   target_link_libraries(dtan_application PRIVATE dtan_library)
 
-elseif(UNIX)
+elseif(UNIX AND NOT APPLE)
   find_package(X11 REQUIRED)
   add_library(dtan_library STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/dtan_linux.c ${CMAKE_CURRENT_SOURCE_DIR}/src/dtan.c)
   SET_TARGET_PROPERTIES(dtan_library PROPERTIES OUTPUT_NAME dtan)
