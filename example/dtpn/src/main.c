@@ -19,18 +19,18 @@
 
 char get_working_directory(char* path, int path_size) {
 #ifdef _WIN32
-    _getcwd(path, path_size);
+    if(_getcwd(path, path_size) == NULL) return 0;
 #elif __linux__ || __APPLE__
-    getcwd(path, path_size);
+    if(getcwd(path, path_size) == NULL) return 0;
 #endif
     return 1;
 }
 
 char get_fullpath(const char* relative_path, char* absolute_path) {
 #ifdef _WIN32
-    _fullpath(absolute_path, relative_path, FULLPATH_SIZE);
+    if(_fullpath(absolute_path, relative_path, FULLPATH_SIZE) == NULL) return 0;
 #elif __linux__ || __APPLE__
-    realpath(relative_path, absolute_path);
+    if(realpath(relative_path, absolute_path) == NULL) return 0;
 #endif
     return 1;
 }
